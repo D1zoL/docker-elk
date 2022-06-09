@@ -16,7 +16,7 @@ services:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
     init: true
     volumes:
-      - setup:/state:Z
+      - /opt/elasticsearch/setup:/state:Z
     environment:
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
       LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
@@ -31,12 +31,12 @@ services:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
-      - elasticsearch:/usr/share/elasticsearch/data:z
+      - /opt/elasticsearch/data:/usr/share/elasticsearch/data:z
     ports:
       - "9200:9200"
       - "9300:9300"
     environment:
-      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      ES_JAVA_OPTS: -Xms512m -Xmx8192m
       # Bootstrap password.
       # Used to initialize the keystore during the initial startup of
       # Elasticsearch. Ignored on subsequent runs.
@@ -61,7 +61,7 @@ services:
       - "5000:5000/udp"
       - "9600:9600"
     environment:
-      LS_JAVA_OPTS: -Xms256m -Xmx256m
+      LS_JAVA_OPTS: -Xms256m -Xmx1024m
       LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
     networks:
       - elk
@@ -87,7 +87,3 @@ services:
 networks:
   elk:
     driver: bridge
-
-volumes:
-  setup:
-  elasticsearch:
