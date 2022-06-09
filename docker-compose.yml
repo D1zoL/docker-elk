@@ -16,7 +16,7 @@ services:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
     init: true
     volumes:
-      - /opt/elasticsearch/setup:/state:Z
+      - setup:/state:Z
     environment:
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
       LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
@@ -31,7 +31,7 @@ services:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
-      - /opt/elasticsearch/data:/usr/share/elasticsearch/data:z
+      - elasticsearch:/usr/share/elasticsearch/data:z
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -87,3 +87,7 @@ services:
 networks:
   elk:
     driver: bridge
+    
+volumes:
+  setup:
+  elasticsearch:
